@@ -14,6 +14,16 @@ const clearAllBtn   = document.querySelector('#clear-all-btn');
 // Each note: { id, text, category, createdAt }
 let notes = [];
 
+// ── Persistence helpers ─────────────────────────────────
+function saveNotes() {
+  localStorage.setItem('quicknotes', JSON.stringify(notes));
+}
+
+function loadNotes() {
+  const stored = localStorage.getItem('quicknotes');
+  notes = stored ? JSON.parse(stored) : [];
+}
+
 // ── Date formatting ─────────────────────────────────────
 function formatDate(isoString) {
   const date = new Date(isoString);
@@ -40,52 +50,67 @@ function updateCount() {
 
 // ── Render ──────────────────────────────────────────────
 function render() {
+  const query = searchInput.value.trim().toLowerCase();
+
+  // Filter notes based on search query
+  const filtered = query
+    ? notes.filter(note => note.text.toLowerCase().includes(query))
+    : notes;
+
   // Clear the list safely (no innerHTML)
   while (notesList.firstChild) {
     notesList.removeChild(notesList.firstChild);
   }
 
-  notes.forEach(note => {
+  if (filtered.length === 0 && query) {
+    // No-results message — no user text rendered here
     const li = document.createElement('li');
-    li.className = `category-${note.category}`;
-    li.dataset.id = note.id;
-
-    // Header row: note text + delete button
-    const header = document.createElement('div');
-    header.className = 'note-header';
-
-    const textSpan = document.createElement('span');
-    textSpan.className = 'note-text';
-    textSpan.textContent = note.text; // never innerHTML
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.textContent = 'Delete';
-    deleteBtn.setAttribute('aria-label', 'Delete note');
-    deleteBtn.addEventListener('click', () => deleteNote(note.id));
-
-    header.appendChild(textSpan);
-    header.appendChild(deleteBtn);
-
-    // Meta row: category label + date
-    const meta = document.createElement('div');
-    meta.className = 'note-meta';
-
-    const categoryLabel = document.createElement('span');
-    categoryLabel.className = 'note-category-label';
-    categoryLabel.textContent = note.category;
-
-    const dateSpan = document.createElement('span');
-    dateSpan.className = 'note-date';
-    dateSpan.textContent = formatDate(note.createdAt);
-
-    meta.appendChild(categoryLabel);
-    meta.appendChild(dateSpan);
-
-    li.appendChild(header);
-    li.appendChild(meta);
+    li.className = 'no-match';
+    li.textContent = 'No notes match your search.';
     notesList.appendChild(li);
-  });
+  } else {
+    filtered.forEach(note => {
+      const li = document.createElement('li');
+      li.className = `category-${note.category}`;
+      li.dataset.id = note.id;
+
+      // Header row: note text + delete button
+      const header = document.createElement('div');
+      header.className = 'note-header';
+
+      const textSpan = document.createElement('span');
+      textSpan.className = 'note-text';
+      textSpan.textContent = note.text; // never innerHTML
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.setAttribute('aria-label', 'Delete note');
+      deleteBtn.addEventListener('click', () => deleteNote(note.id));
+
+      header.appendChild(textSpan);
+      header.appendChild(deleteBtn);
+
+      // Meta row: category label + date
+      const meta = document.createElement('div');
+      meta.className = 'note-meta';
+
+      const categoryLabel = document.createElement('span');
+      categoryLabel.className = 'note-category-label';
+      categoryLabel.textContent = note.category;
+
+      const dateSpan = document.createElement('span');
+      dateSpan.className = 'note-date';
+      dateSpan.textContent = formatDate(note.createdAt);
+
+      meta.appendChild(categoryLabel);
+      meta.appendChild(dateSpan);
+
+      li.appendChild(header);
+      li.appendChild(meta);
+      notesList.appendChild(li);
+    });
+  }
 
   updateCount();
 }
@@ -99,12 +124,14 @@ function addNote(text, category) {
     createdAt: new Date().toISOString(),
   };
   notes.unshift(note); // newest first
+  saveNotes();
   render();
 }
 
 // ── Delete note ─────────────────────────────────────────
 function deleteNote(id) {
   notes = notes.filter(note => note.id !== id);
+  saveNotes();
   render();
 }
 
@@ -113,6 +140,7 @@ clearAllBtn.addEventListener('click', () => {
   if (notes.length === 0) return;
   if (confirm('Delete all notes?')) {
     notes = [];
+    saveNotes();
     render();
   }
 });
@@ -145,5 +173,11 @@ noteForm.addEventListener('submit', event => {
   noteInput.focus();
 });
 
+// ── Live search ─────────────────────────────────────────
+searchInput.addEventListener('input', () => {
+  render();
+});
+
 // ── Boot ────────────────────────────────────────────────
+loadNotes();
 render();
