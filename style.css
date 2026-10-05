@@ -1,0 +1,314 @@
+/* ── Reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ── Base ──────────────────────────────────────────── */
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  background: #f0f4f8;
+  color: #2d3748;
+}
+
+/* ── Header ────────────────────────────────────────── */
+header {
+  background: #4f46e5;
+  color: #ffffff;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+}
+
+header .tagline {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+/* ── Main column ───────────────────────────────────── */
+main {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Section cards ─────────────────────────────────── */
+section {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  color: #4f46e5;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+/* ── Form (Flexbox) ────────────────────────────────── */
+#note-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+#note-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+  width: 100%;
+  margin-bottom: -0.25rem;
+}
+
+#note-input {
+  flex: 1 1 200px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+#note-input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+#note-category {
+  flex: 0 1 140px;
+  padding: 0.55rem 0.5rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+#note-form button[type="submit"] {
+  flex: 0 0 auto;
+  padding: 0.55rem 1.25rem;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#note-form button[type="submit"]:hover {
+  background: #4338ca;
+  transform: translateY(-1px);
+}
+
+/* ── Error message ─────────────────────────────────── */
+#error-message {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  min-height: 1.25rem;
+  margin: 0.4rem 0 0;
+  font-weight: 500;
+}
+
+/* ── Search input ──────────────────────────────────── */
+#search-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.2s;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* ── Note count ────────────────────────────────────── */
+#note-count {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0 0 1rem;
+}
+
+/* ── Notes list ────────────────────────────────────── */
+#notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Note card ─────────────────────────────────────── */
+#notes-list li {
+  padding: 1rem 1rem 1rem 1.1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin: 0;
+  border-left-width: 5px;
+  background: #fafafa;
+  transition: box-shadow 0.2s;
+}
+
+#notes-list li:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Category colour accents */
+#notes-list li.category-personal {
+  border-left-color: #38b2ac; /* teal */
+}
+
+#notes-list li.category-work {
+  border-left-color: #c53030; /* dark red */
+}
+
+#notes-list li.category-study {
+  border-left-color: #3182ce; /* blue */
+}
+
+/* Card inner layout */
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.note-text {
+  flex: 1;
+  font-size: 0.975rem;
+  word-break: break-word;
+}
+
+.note-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: #718096;
+}
+
+.note-category-label {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.category-personal .note-category-label { background: #38b2ac; }
+.category-work    .note-category-label { background: #c53030; }
+.category-study   .note-category-label { background: #3182ce; }
+
+/* ── Buttons ───────────────────────────────────────── */
+.delete-btn {
+  flex-shrink: 0;
+  padding: 0.3rem 0.7rem;
+  background: #fff;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.delete-btn:hover {
+  background: #e53e3e;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ── Clear All button ──────────────────────────────── */
+#clear-all-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1.1rem;
+  background: #fff;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+  display: none; /* hidden when no notes */
+}
+
+#clear-all-btn:hover {
+  background: #e53e3e;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ── Empty search message ──────────────────────────── */
+.no-match {
+  font-size: 0.9rem;
+  color: #718096;
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+
+/* ── Footer ────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.85rem;
+  color: #a0aec0;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
+}
+
+/* ── Responsive (≤ 600px) ──────────────────────────── */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  #note-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #note-input,
+  #note-category,
+  #note-form button[type="submit"] {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .note-header {
+    flex-direction: column;
+  }
+
+  .delete-btn {
+    align-self: flex-end;
+  }
+}
