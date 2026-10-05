@@ -102,12 +102,43 @@ function addNote(text, category) {
   render();
 }
 
+// ── Delete note ─────────────────────────────────────────
+function deleteNote(id) {
+  notes = notes.filter(note => note.id !== id);
+  render();
+}
+
+// ── Clear All button (bonus) ────────────────────────────
+clearAllBtn.addEventListener('click', () => {
+  if (notes.length === 0) return;
+  if (confirm('Delete all notes?')) {
+    notes = [];
+    render();
+  }
+});
+
 // ── Form submission ─────────────────────────────────────
 noteForm.addEventListener('submit', event => {
   event.preventDefault();
 
   const text     = noteInput.value.trim();
   const category = noteCategory.value;
+
+  // Validation
+  if (text.length === 0) {
+    errorMessage.textContent = 'Please type a note first.';
+    noteInput.focus();
+    return;
+  }
+
+  if (text.length > 200) {
+    errorMessage.textContent = 'Notes must be 200 characters or fewer.';
+    noteInput.focus();
+    return;
+  }
+
+  // Clear any previous error
+  errorMessage.textContent = '';
 
   addNote(text, category);
   noteInput.value = '';
